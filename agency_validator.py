@@ -38,9 +38,8 @@ class agency_validator:
 
         df.to_csv(f"./{self.unzipped_gtfs_path}_agency_temp.csv", index=False)
 
-        os.remove(f"./transit_datasets_unzipped/{self.unzipped_gtfs_path}/agency.txt")
-        os.rename(f"{self.unzipped_gtfs_path}_agency_temp.csv",
-                  f"./transit_datasets_unzipped/{self.unzipped_gtfs_path}/agency.txt")
+        os.remove(agency_path)
+        os.rename(f"{self.unzipped_gtfs_path}_agency_temp.csv",agency_path)
 
         print(f"Updated agency_id in agency.txt of {self.unzipped_gtfs_path}")
 
@@ -62,9 +61,8 @@ class agency_validator:
 
         df.to_csv(f"./{self.unzipped_gtfs_path}_routes_temp.csv", index=False)
 
-        os.remove(f"./transit_datasets_unzipped/{self.unzipped_gtfs_path}/routes.txt")
-        os.rename(f"{self.unzipped_gtfs_path}_routes_temp.csv",
-                  f"./transit_datasets_unzipped/{self.unzipped_gtfs_path}/routes.txt")
+        os.remove(routes_path)
+        os.rename(f"{self.unzipped_gtfs_path}_routes_temp.csv",routes_path)
 
         print(f"Updated agency_id in routes.txt of {self.unzipped_gtfs_path}")
 
@@ -86,9 +84,8 @@ class agency_validator:
 
         df.to_csv(f"./{self.unzipped_gtfs_path}_fare_temp.csv", index=False)
 
-        os.remove(f"./transit_datasets_unzipped/{self.unzipped_gtfs_path}/fare_attributes.txt")
-        os.rename(f"{self.unzipped_gtfs_path}_fare_temp.csv",
-                  f"./transit_datasets_unzipped/{self.unzipped_gtfs_path}/fare_attributes.txt")
+        os.remove(fare_path)
+        os.rename(f"{self.unzipped_gtfs_path}_fare_temp.csv",fare_path)
 
         print(f"Updated agency_id in fare_attributes.txt of {self.unzipped_gtfs_path}")
 
@@ -110,9 +107,8 @@ class agency_validator:
 
         df.to_csv(f"./{self.unzipped_gtfs_path}_attributions_temp.csv", index=False)
 
-        os.remove(f"./transit_datasets_unzipped/{self.unzipped_gtfs_path}/attributions.txt")
-        os.rename(f"{self.unzipped_gtfs_path}_attributions_temp.csv",
-                  f"./transit_datasets_unzipped/{self.unzipped_gtfs_path}/attributions.txt")
+        os.remove(attributions_path)
+        os.rename(f"{self.unzipped_gtfs_path}_attributions_temp.csv",attributions_path)
 
         print(f"Updated agency_id in attributions.txt of {self.unzipped_gtfs_path}")
 
