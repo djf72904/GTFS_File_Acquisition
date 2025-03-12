@@ -1,2 +1,4 @@
 .venv
 .idea
+transit_datasets_unzipped
+transit_datasets_zipped
