@@ -23,30 +23,41 @@ datasets = {
 
 def main():
 
-    if os.path.exists("./transit_datasets_unzipped"):
-        shutil.rmtree("./transit_datasets_unzipped")
-        print("removed transit_datasets_unzipped")
-    if os.path.exists("./transit_datasets_zipped"):
-        shutil.rmtree("./transit_datasets_zipped")
-        print("removed transit_datasets_zipped")
+    # if os.path.exists("./transit_datasets_unzipped"):
+    #     shutil.rmtree("./transit_datasets_unzipped")
+    #     print("removed transit_datasets_unzipped")
+    # if os.path.exists("./transit_datasets_zipped"):
+    #     shutil.rmtree("./transit_datasets_zipped")
+    #     print("removed transit_datasets_zipped")
+    # if(os.path.exists("./transit_datasets_final")):
+    #     shutil.rmtree("./transit_datasets_final")
 
     downloader = transit_data_retriever(datasets)
-    print("------------------------------------------------------------")
-    print("Downloading and unzipping transit data from MobilityDatabase")
-    print("------------------------------------------------------------")
-    downloader.download_data()
-    downloader.unzip_data()
+    # print("------------------------------------------------------------")
+    # print("Downloading and unzipping transit data from MobilityDatabase")
+    # print("------------------------------------------------------------")
+    # downloader.download_data()
+    # downloader.unzip_data()
+    #
+    # validators = []
+    # for name, url in datasets.items():
+    #     validators.append(gtfs_validator(name))
+    #
+    # for validator in validators:
+    #     print("---------------------------------------------------------")
+    #     print(f"Validating GTFS files for {validator.unzipped_gtfs_path}")
+    #     print("---------------------------------------------------------")
+    #     validator.fix_fares()
+    #     validator.make_agency_unique()
 
-    validators = []
-    for name, url in datasets.items():
-        validators.append(gtfs_validator(name))
+    print("------------------------------------------------------------")
+    print("Zip final files back up for validation")
+    print("------------------------------------------------------------")
+    downloader.zip_data()
 
-    for validator in validators:
-        print("---------------------------------------------------------")
-        print(f"Validating GTFS files for {validator.unzipped_gtfs_path}")
-        print("---------------------------------------------------------")
-        validator.fix_fares()
-        validator.make_agency_unique()
+    print("------------------------------------------------------------")
+    print("Validate final zip files with command line validator")
+    print("------------------------------------------------------------")
 
 
 

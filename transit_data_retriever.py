@@ -29,3 +29,12 @@ class transit_data_retriever:
                 print(f"Unzipping {name}.zip")
                 zip_ref.extractall(f"{self.unzipped_dir}/{name}")
                 print(f"Saved {name}.zip to transit_datasets_unzipped")
+
+    def zip_data(self):
+        os.makedirs("./transit_datasets_final", exist_ok=True)
+        for name, url in self.datasets.items():
+            print(f"Zipping final for {name}")
+            files = os.listdir(f"./transit_datasets_unzipped/{name}")
+            with zipfile.ZipFile(f"./transit_datasets_final/{name}.zip", "w") as zip_me:
+                for f in files:
+                    zip_me.write(f"./transit_datasets_unzipped/{name}/{f}")
