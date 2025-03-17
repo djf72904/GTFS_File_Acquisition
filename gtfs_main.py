@@ -29,8 +29,8 @@ def main():
     # if os.path.exists("./transit_datasets_zipped"):
     #     shutil.rmtree("./transit_datasets_zipped")
     #     print("removed transit_datasets_zipped")
-    # if(os.path.exists("./transit_datasets_final")):
-    #     shutil.rmtree("./transit_datasets_final")
+    if os.path.exists("./transit_datasets_final"):
+        shutil.rmtree("./transit_datasets_final")
 
     downloader = transit_data_retriever(datasets)
     # print("------------------------------------------------------------")
@@ -38,17 +38,17 @@ def main():
     # print("------------------------------------------------------------")
     # downloader.download_data()
     # downloader.unzip_data()
-    #
-    # validators = []
-    # for name, url in datasets.items():
-    #     validators.append(gtfs_validator(name))
-    #
-    # for validator in validators:
-    #     print("---------------------------------------------------------")
-    #     print(f"Validating GTFS files for {validator.unzipped_gtfs_path}")
-    #     print("---------------------------------------------------------")
-    #     validator.fix_fares()
-    #     validator.make_agency_unique()
+
+    validators = []
+    for name, url in datasets.items():
+        validators.append(gtfs_validator(name))
+
+    for validator in validators:
+        print("---------------------------------------------------------")
+        print(f"Validating GTFS files for {validator.unzipped_gtfs_path}")
+        print("---------------------------------------------------------")
+        validator.fix_fares()
+        validator.make_agency_unique()
 
     print("------------------------------------------------------------")
     print("Zip final files back up for validation")
@@ -59,7 +59,10 @@ def main():
     print("Validate final zip files with command line validator")
     print("------------------------------------------------------------")
 
+    for validator in validators:
+        validator.run_mdb_validator()
 
+    print("GTFS File Acquisition Complete. Check transit_datasets_final for complete zip files")
 
 if __name__ == "__main__":
     main()
