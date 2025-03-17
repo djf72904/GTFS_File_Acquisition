@@ -23,21 +23,26 @@ datasets = {
 
 def main():
 
-    # if os.path.exists("./transit_datasets_unzipped"):
-    #     shutil.rmtree("./transit_datasets_unzipped")
-    #     print("removed transit_datasets_unzipped")
-    # if os.path.exists("./transit_datasets_zipped"):
-    #     shutil.rmtree("./transit_datasets_zipped")
-    #     print("removed transit_datasets_zipped")
+    if os.path.exists("./transit_datasets_unzipped"):
+        shutil.rmtree("./transit_datasets_unzipped")
+        print("removed transit_datasets_unzipped")
+    if os.path.exists("./transit_datasets_zipped"):
+        shutil.rmtree("./transit_datasets_zipped")
+        print("removed transit_datasets_zipped")
     if os.path.exists("./transit_datasets_final"):
         shutil.rmtree("./transit_datasets_final")
+        print("removed transit_datasets_final")
+    if os.path.exists("./validation"):
+        shutil.rmtree("./validation")
+        os.makedirs("./validation")
+        print("removed validation")
 
     downloader = transit_data_retriever(datasets)
-    # print("------------------------------------------------------------")
-    # print("Downloading and unzipping transit data from MobilityDatabase")
-    # print("------------------------------------------------------------")
-    # downloader.download_data()
-    # downloader.unzip_data()
+    print("------------------------------------------------------------")
+    print("Downloading and unzipping transit data from MobilityDatabase")
+    print("------------------------------------------------------------")
+    downloader.download_data()
+    downloader.unzip_data()
 
     validators = []
     for name, url in datasets.items():

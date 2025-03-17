@@ -37,4 +37,6 @@ class transit_data_retriever:
             files = os.listdir(f"./transit_datasets_unzipped/{name}")
             with zipfile.ZipFile(f"./transit_datasets_final/{name}.zip", "w") as zip_me:
                 for f in files:
-                    zip_me.write(f"./transit_datasets_unzipped/{name}/{f}")
+                    os.rename(f"./transit_datasets_unzipped/{name}/{f}", f)
+                    zip_me.write(f)
+                    os.remove(f)

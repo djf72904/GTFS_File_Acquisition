@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GTFS Schedule Validation Report</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8; width=device-width, initial-scale=1"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(document).tooltip();
+      });
+    </script>
+    <style>
+    body {
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        min-width: 800px;
+        padding: 1em 2em;
+    }
+
+    .error:before {
+        content: "\1F534  ";
+    }
+
+    .warning:before {
+        content: "\1F7E0  ";
+    }
+
+    .info:before {
+        content: "\26AA  ";
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .version-update {
+        font-weight: bold;
+        color: red;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    table caption {
+        text-align: left;
+        margin: 0.5em 0;
+    }
+
+    table th {
+        text-align: left;
+        border-bottom: 2px solid #000;
+        padding: 0.5em;
+        white-space: nowrap;
+    }
+
+    table td {
+        border-bottom: 1px solid #ddd;
+        padding: 0.5em;
+    }
+
+    .desc-content {
+        padding: 0.5em;
+        border-bottom: 5px solid #000;
+        border-top: 5px solid #000;
+    }
+
+    .desc-content h3 {
+        margin-top: 0;
+    }
+
+    .summary {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .summary-row {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .summary-cell {
+        padding: 5px;
+        box-sizing: border-box;
+        flex: 1;
+    }
+
+    .summary h4 {
+        white-space: nowrap;
+    }
+
+    .summary dt,
+    .summary dd {
+        display: inline-block;
+    }
+
+    .summary dd {
+        font-weight: bold;
+        width: 130px;
+        margin-inline-start: 0;
+    }
+
+    .summary ul,
+    .summary ol {
+        padding-left: 20px;
+    }
+
+    .summary li {
+        padding-left: 0px;
+    }
+
+    hr {
+        border: none;
+        border-top: 2px solid #000;
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
+
+    .spec-feature {
+        background-color: #d4d4d4;
+        padding: 2px 5px;
+        margin-right: 2px;
+        margin-bottom: 2px;
+        text-align: center;
+    }
+
+    .tooltip {
+        text-decoration: none;
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 100%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        max-width: 400px;
+        min-width: 100px;
+        width: max-content;
+        white-space: normal;
+    }
+
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: help;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    /* Responsive behavior */
+    @media (max-width: 767px) {
+        .summary .summary_info,
+        .summary .summary_list {
+            flex-basis: 100%;
+        }
+    }
+
+    table.accordion > tbody > tr.notice td,
+    table.accordion > tbody > tr.view th {
+        cursor: auto;
+    }
+
+    table.accordion > tbody > tr.notice td:first-child,
+    table.accordion > tbody > tr.notice th:first-child {
+        position: relative;
+        padding-left: 20px;
+    }
+
+    table.accordion > tbody > tr.notice td:first-child:before,
+    table.accordion > tbody > tr.notice th:first-child:before {
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        width: 9px;
+        height: 16px;
+        margin-top: -8px;
+        color: #000;
+        content: "+";
+    }
+
+    table.accordion > tbody > tr.notice.open td:first-child:before,
+    table.accordion > tbody > tr.notice.open th:first-child:before {
+        content: "\2013";
+    }
+
+    table.accordion > tbody > tr.notice:hover {
+        background: #ddd;
+    }
+
+    table.accordion > tbody > tr.notice.open {
+        background: #ddd;
+        color: black;
+    }
+
+    table.accordion > tbody > tr.description {
+        display: none;
+    }
+
+    table.accordion > tbody > tr.description.open {
+        display: table-row;
+    }
+
+    #gtfs-features-container > div {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+
+    .warning-display {
+        padding: 10px;
+        border: solid 2px orange;
+        border-radius: 11px;
+        width: fit-content;
+        font-weight: bold;
+    }
+</style>
+
+</head>
+<body>
+    <h1>GTFS Schedule Validation Report</h1>
+    <p>This report was generated by the <a href="https://github.com/MobilityData/gtfs-validator">Canonical GTFS Schedule
+        validator</a>,
+        <span>version 6.0.0</span> at <span>2025-03-16T20:58:30-04:00</span>,
+        <br/>
+        for the dataset
+        <span>file:///C:/Users/djfau/Desktop/Senior%20Design/GTFS_File_Acquisition/transit_datasets_final/PATCO.zip</span><span>. No country code was provided.</span>
+        </br>
+        </p>
+
+    <p>Use this report alongside our <a href="https://gtfs-validator.mobilitydata.org/rules.html">documentation</a>.</p>
+
+    <div>
+        
+    </div>
+
+    <p class="version-update">A new version of the <a
+            href="https://github.com/MobilityData/gtfs-validator/releases">Canonical GTFS Schedule validator</a> is available!
+        Please update to get the latest/best validation results.</p>
+
+    <h2>Summary</h2>
+
+    <div class="summary">
+        <div class="summary-row">
+            <div class="summary-cell summary_info">
+                <h4>Agencies included</h4>
+                <hr />
+                <ul>
+                    <li>
+                        <span>Port Authority Transit Corporation</span>
+                        <ul>
+                            <li><b>website: </b><a href="http://www.ridepatco.org/?utm_source=AddTransit&amp;utm_medium=GTFS">http://www.ridepatco.org/?utm_source=AddTransit&amp;utm_medium=GTFS</a></li>
+                            <li><b>phone number: </b><span >856/772-6900</span></li>
+                            <li><b>email: </b><span >N/A</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="summary-cell summary_info">
+                <h4>Feed Info</h4>
+                <hr />
+                <dl>
+                    <div>
+                        <div>
+                            <dd >Publisher Name:</dd>
+                            <dt>
+                            
+                                
+                                <span>AddTransit</span>
+                                
+                            </dt>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <dd >Publisher URL:</dd>
+                            <dt>
+                            <span>
+                                <a href="https://addtransit.com" target="_blank" >https://addtransit.com</a>
+                            </span>
+                                
+                                
+                                
+                            </dt>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <dd >Feed Email:</dd>
+                            <dt>
+                            
+                                
+                                <span>gtfs@addtransit.com</span>
+                                
+                            </dt>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <dd >Feed Language:</dd>
+                            <dt>
+                            
+                                
+                                <span>English</span>
+                                
+                            </dt>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <dd >Feed Start Date:</dd>
+                            <dt>
+                            
+                                
+                                <span>2015-07-02</span>
+                                
+                            </dt>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <dd >Feed End Date:</dd>
+                            <dt>
+                            
+                                
+                                <span>2025-11-26</span>
+                                
+                            </dt>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <dd >Service Window:</dd>
+                            <dt>
+                            
+                                
+                                <span>2015-07-02 to 2025-11-26</span>
+                                <span >
+                                     <a href="#" class="tooltip" onclick="event.preventDefault();"><span>(?)</span>
+                                        <span class="tooltiptext" style="transform: translateX(-100%)">The range of service dates covered by the feed, based on trips with an associated service_id in calendar.txt and/or calendar_dates.txt</span>
+                                    </a>
+                                </span>
+                            </dt>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            
+                            
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            
+                            
+                        </div>
+                    </div>
+                </dl>
+            </div>
+            <div class="summary-cell summary_list">
+                <h4>Files included</h4>
+                <hr />
+                <ol>
+                    <li>agency.txt</li>
+                    <li>areas.txt</li>
+                    <li>booking_rules.txt</li>
+                    <li>calendar.txt</li>
+                    <li>calendar_dates.txt</li>
+                    <li>fare_attributes.txt</li>
+                    <li>fare_leg_rules.txt</li>
+                    <li>fare_media.txt</li>
+                    <li>fare_products.txt</li>
+                    <li>fare_rules.txt</li>
+                    <li>fare_transfer_rules.txt</li>
+                    <li>feed_info.txt</li>
+                    <li>frequencies.txt</li>
+                    <li>networks.txt</li>
+                    <li>rider_categories.txt</li>
+                    <li>route_networks.txt</li>
+                    <li>routes.txt</li>
+                    <li>shapes.txt</li>
+                    <li>stop_areas.txt</li>
+                    <li>stop_times.txt</li>
+                    <li>stops.txt</li>
+                    <li>timeframes.txt</li>
+                    <li>transfers.txt</li>
+                    <li>trips.txt</li>
+                </ol>
+            </div>
+            <div class="summary-cell summary_list">
+                <h4>Counts</h4>
+                <hr />
+                <ul>
+                    <li><span >Agencies: 1</span></li>
+                    <li><span >Blocks: 0</span></li>
+                    <li><span >Routes: 2</span></li>
+                    <li><span >Shapes: 3</span></li>
+                    <li><span >Stops: 13</span></li>
+                    <li><span >Trips: 10220</span></li>
+                </ul>
+            </div>
+            <div class="summary-cell summary_list" id="gtfs-features-container">
+                <h4>
+                    GTFS Features included
+                    <a href="#" class="tooltip" onclick="event.preventDefault();"><span>(?)</span>
+                        <span class="tooltiptext" style="transform: translateX(-100%)">GTFS features provide a standardized vocabulary to define and describe features that are officially adopted in GTFS.</span>
+                    </a>
+                </h4>
+                <hr />
+                <div>
+                    <span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/base_add-ons/#shapes" target="_blank">Shapes</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/base_add-ons/#frequencies" target="_blank">Frequencies</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/base_add-ons/#feed-information" target="_blank">Feed Information</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/fares/#fares-v1" target="_blank">Fares V1</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/base_add-ons/#route-colors" target="_blank">Route Colors</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/base_add-ons/#headsigns" target="_blank">Headsigns</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/accessibility/#stops-wheelchair-accessibility" target="_blank">Stops Wheelchair Accessibility</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/accessibility/#trips-wheelchair-accessibility" target="_blank">Trips Wheelchair Accessibility</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/base_add-ons/#bike-allowed" target="_blank">Bike Allowed</a>
+                    </span><span class="spec-feature">
+                        <a href="https://gtfs.org/getting_started/features/base_add-ons/#location-types" target="_blank">Location Types</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <h2>Specification Compliance report</h2>
+
+    <h3><span>87</span> notices reported
+        (<span>0</span> errors,
+        <span>84</span> warnings,
+        <span>3</span> infos)
+    </h3>
+
+    <table class="accordion">
+        <thead>
+        <tr>
+            <th>Notice Code</th>
+            <th>Severity</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <span>
+            <span>
+                <tr class="notice">
+                    <td >expired_calendar</td>
+                    <td class="warning" >WARNING</td>
+                    <td >84</td>
+                </tr>
+                <tr class="description">
+                    <td colspan="4">
+                        <div class="desc-content">
+                            <h3 >expired_calendar</h3>
+                            <p ><p>Dataset should not contain date ranges for services that have already expired.</p>
+<p>This warning takes into account the <code>calendar_dates.txt</code> file as well as the <code>calendar.txt</code>
+file.</p>
+</p>
+                            <p> You can see more about this notice <a
+                                    href="https://gtfs-validator.mobilitydata.org/rules.html#expired_calendar-rule">here</a>.
+                            </p>
+                             <p>Only the first 50 of <span>84</span> affected records are displayed below.</p>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        
+                                            <th>
+                                               <span>csvRowNumber</span>
+                                                <a href="#" class="tooltip" onclick="event.preventDefault();"><span>(?)</span>
+                                                    <span class="tooltiptext">The row of the faulty record.</span>
+                                                </a>
+                                            </th>
+                                        
+                                            <th>
+                                               <span>serviceId</span>
+                                                <a href="#" class="tooltip" onclick="event.preventDefault();"><span>(?)</span>
+                                                    <span class="tooltiptext">The service id of the faulty record.</span>
+                                                </a>
+                                            </th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    
+                                            <td >45</td>
+                                    
+                                            <td >&quot;44&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >46</td>
+                                    
+                                            <td >&quot;45&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >47</td>
+                                    
+                                            <td >&quot;46&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >48</td>
+                                    
+                                            <td >&quot;47&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >49</td>
+                                    
+                                            <td >&quot;48&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >50</td>
+                                    
+                                            <td >&quot;49&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >51</td>
+                                    
+                                            <td >&quot;50&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >52</td>
+                                    
+                                            <td >&quot;51&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >53</td>
+                                    
+                                            <td >&quot;52&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >54</td>
+                                    
+                                            <td >&quot;53&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >11</td>
+                                    
+                                            <td >&quot;10&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >55</td>
+                                    
+                                            <td >&quot;54&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >12</td>
+                                    
+                                            <td >&quot;11&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >56</td>
+                                    
+                                            <td >&quot;55&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >13</td>
+                                    
+                                            <td >&quot;12&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >57</td>
+                                    
+                                            <td >&quot;56&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >14</td>
+                                    
+                                            <td >&quot;13&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >58</td>
+                                    
+                                            <td >&quot;57&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >15</td>
+                                    
+                                            <td >&quot;14&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >60</td>
+                                    
+                                            <td >&quot;58&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >16</td>
+                                    
+                                            <td >&quot;15&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >59</td>
+                                    
+                                            <td >&quot;59&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >17</td>
+                                    
+                                            <td >&quot;16&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >18</td>
+                                    
+                                            <td >&quot;17&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >19</td>
+                                    
+                                            <td >&quot;18&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >20</td>
+                                    
+                                            <td >&quot;19&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >2</td>
+                                    
+                                            <td >&quot;1&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >3</td>
+                                    
+                                            <td >&quot;2&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >4</td>
+                                    
+                                            <td >&quot;3&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >5</td>
+                                    
+                                            <td >&quot;4&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >6</td>
+                                    
+                                            <td >&quot;5&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >7</td>
+                                    
+                                            <td >&quot;6&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >8</td>
+                                    
+                                            <td >&quot;7&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >9</td>
+                                    
+                                            <td >&quot;8&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >10</td>
+                                    
+                                            <td >&quot;9&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >61</td>
+                                    
+                                            <td >&quot;60&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >62</td>
+                                    
+                                            <td >&quot;61&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >63</td>
+                                    
+                                            <td >&quot;62&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >64</td>
+                                    
+                                            <td >&quot;63&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >21</td>
+                                    
+                                            <td >&quot;20&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >65</td>
+                                    
+                                            <td >&quot;64&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >22</td>
+                                    
+                                            <td >&quot;21&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >66</td>
+                                    
+                                            <td >&quot;65&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >23</td>
+                                    
+                                            <td >&quot;22&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >67</td>
+                                    
+                                            <td >&quot;66&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >24</td>
+                                    
+                                            <td >&quot;23&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >68</td>
+                                    
+                                            <td >&quot;67&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >25</td>
+                                    
+                                            <td >&quot;24&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >69</td>
+                                    
+                                            <td >&quot;68&quot;</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >26</td>
+                                    
+                                            <td >&quot;25&quot;</td>
+                                    
+                                    </tr>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </span>
+        </span><span>
+            <span>
+                <tr class="notice">
+                    <td >unknown_column</td>
+                    <td class="info" >INFO</td>
+                    <td >2</td>
+                </tr>
+                <tr class="description">
+                    <td colspan="4">
+                        <div class="desc-content">
+                            <h3 >unknown_column</h3>
+                            <p ><p>A column name is unknown.</p>
+</p>
+                            <p> You can see more about this notice <a
+                                    href="https://gtfs-validator.mobilitydata.org/rules.html#unknown_column-rule">here</a>.
+                            </p>
+                             
+                            <table>
+                                <thead>
+                                    <tr>
+                                        
+                                            <th>
+                                               <span>filename</span>
+                                                <a href="#" class="tooltip" onclick="event.preventDefault();"><span>(?)</span>
+                                                    <span class="tooltiptext">The name of the faulty file.</span>
+                                                </a>
+                                            </th>
+                                        
+                                            <th>
+                                               <span>fieldName</span>
+                                                <a href="#" class="tooltip" onclick="event.preventDefault();"><span>(?)</span>
+                                                    <span class="tooltiptext">The name of the unknown column.</span>
+                                                </a>
+                                            </th>
+                                        
+                                            <th>
+                                               <span>index</span>
+                                                <a href="#" class="tooltip" onclick="event.preventDefault();"><span>(?)</span>
+                                                    <span class="tooltiptext">The index of the faulty column.</span>
+                                                </a>
+                                            </th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    
+                                            <td >&quot;fare_media.txt&quot;</td>
+                                    
+                                            <td >&quot;rider_category_id&quot;</td>
+                                    
+                                            <td >4</td>
+                                    
+                                    </tr>
+                                    <tr>
+                                    
+                                            <td >&quot;fare_products.txt&quot;</td>
+                                    
+                                            <td >&quot;rider_category_id&quot;</td>
+                                    
+                                            <td >6</td>
+                                    
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </span><span>
+                <tr class="notice">
+                    <td >unknown_file</td>
+                    <td class="info" >INFO</td>
+                    <td >1</td>
+                </tr>
+                <tr class="description">
+                    <td colspan="4">
+                        <div class="desc-content">
+                            <h3 >unknown_file</h3>
+                            <p ><p>A file is unknown.</p>
+</p>
+                            <p> You can see more about this notice <a
+                                    href="https://gtfs-validator.mobilitydata.org/rules.html#unknown_file-rule">here</a>.
+                            </p>
+                             
+                            <table>
+                                <thead>
+                                    <tr>
+                                        
+                                            <th>
+                                               <span>filename</span>
+                                                <a href="#" class="tooltip" onclick="event.preventDefault();"><span>(?)</span>
+                                                    <span class="tooltiptext">The name of the unknown file.</span>
+                                                </a>
+                                            </th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    
+                                            <td >&quot;rider_categories.txt&quot;</td>
+                                    
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </span>
+        </span>
+        </tbody>
+    </table>
+    <br>
+    <footer class="footer text-center text-muted mt-5">
+        Made with ♥ by <a href="https://mobilitydata.org/">MobilityData</a>
+    </footer>
+</body>
+    <script>
+        $(function () {
+            $(".accordion tr.notice").on("click", function () {
+                $(this).toggleClass("open").next(".description").toggleClass("open")
+            })
+        });
+    </script>
+
+</html>
+

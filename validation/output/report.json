@@ -1,0 +1,338 @@
+{
+  "summary": {
+    "validatorVersion": "6.0.0",
+    "validatedAt": "2025-03-16T21:00:23-04:00",
+    "gtfsInput": "file:///C:/Users/djfau/Desktop/Senior%20Design/GTFS_File_Acquisition/transit_datasets_final/PATH.zip",
+    "threads": 1,
+    "outputDirectory": ".\\validation\\output",
+    "systemErrorsReportName": "system_errors.json",
+    "validationReportName": "report.json",
+    "htmlReportName": "report.html",
+    "countryCode": "ZZ",
+    "dateForValidation": "2025-03-16",
+    "feedInfo": {
+      "publisherName": "Trillium Solutions, Inc.",
+      "publisherUrl": "http://www.trilliumtransit.com",
+      "feedLanguage": "English",
+      "feedStartDate": "2024-11-27",
+      "feedEndDate": "2025-05-01",
+      "feedEmail": "support+test+path-nj-us@trilliumtransit.com",
+      "feedServiceWindowStart": "2024-10-12",
+      "feedServiceWindowEnd": "2025-05-01"
+    },
+    "agencies": [],
+    "files": [
+      "areas.txt",
+      "booking_rules.txt",
+      "calendar.txt",
+      "calendar_attributes.txt",
+      "calendar_dates.txt",
+      "directions.txt",
+      "fare_attributes.txt",
+      "fare_rules.txt",
+      "farezone_attributes.txt",
+      "feed_info.txt",
+      "frequencies.txt",
+      "linked_datasets.txt",
+      "location_groups.txt",
+      "routes.txt",
+      "runcut.txt",
+      "shapes.txt",
+      "stop_attributes.txt",
+      "stop_times.txt",
+      "stops.txt",
+      "timetable_stop_order.txt",
+      "timetables.txt",
+      "transfers.txt",
+      "trips.txt"
+    ],
+    "validationTimeSeconds": 3.0078008,
+    "memoryUsageRecords": [
+      {
+        "key": "GtfsFeedLoader.loadTables",
+        "totalMemory": 541065216,
+        "freeMemory": 211075608,
+        "maxMemory": 8506048512,
+        "diffMemory": -194547400
+      },
+      {
+        "key": "GtfsFeedLoader.executeMultiFileValidators",
+        "totalMemory": 541065216,
+        "freeMemory": 462814288,
+        "maxMemory": 8506048512,
+        "diffMemory": 251738680
+      },
+      {
+        "key": "org.mobilitydata.gtfsvalidator.table.GtfsFeedLoader.loadAndValidate",
+        "totalMemory": 541065216,
+        "freeMemory": 461776080,
+        "maxMemory": 8506048512,
+        "diffMemory": 54997648
+      },
+      {
+        "key": "ValidationRunner.run",
+        "totalMemory": 541065216,
+        "freeMemory": 443960632,
+        "maxMemory": 8506048512,
+        "diffMemory": -71994744
+      }
+    ],
+    "counts": {
+      "Shapes": 30,
+      "Stops": 64,
+      "Routes": 6,
+      "Trips": 15747,
+      "Agencies": 0,
+      "Blocks": 0
+    },
+    "gtfsFeatures": [
+      "Transfers",
+      "Shapes",
+      "Feed Information",
+      "Fares V1",
+      "Route Colors",
+      "Headsigns",
+      "Stops Wheelchair Accessibility",
+      "Location Types",
+      "Continuous Stops"
+    ]
+  },
+  "notices": [
+    {
+      "code": "expired_calendar",
+      "severity": "WARNING",
+      "totalNotices": 4,
+      "sampleNotices": [
+        {
+          "csvRowNumber": 6,
+          "serviceId": "c_70822_b_none_d_0"
+        },
+        {
+          "csvRowNumber": 5,
+          "serviceId": "c_70919_b_none_d_0"
+        },
+        {
+          "csvRowNumber": 23,
+          "serviceId": "c_70040_b_none_d_0"
+        },
+        {
+          "csvRowNumber": 29,
+          "serviceId": "c_69113_b_none_d_0"
+        }
+      ]
+    },
+    {
+      "code": "missing_required_file",
+      "severity": "ERROR",
+      "totalNotices": 1,
+      "sampleNotices": [
+        {
+          "filename": "agency.txt"
+        }
+      ]
+    },
+    {
+      "code": "unknown_column",
+      "severity": "INFO",
+      "totalNotices": 33,
+      "sampleNotices": [
+        {
+          "filename": "areas.txt",
+          "fieldName": "wkt",
+          "index": 2
+        },
+        {
+          "filename": "calendar.txt",
+          "fieldName": "service_name",
+          "index": 2
+        },
+        {
+          "filename": "calendar_dates.txt",
+          "fieldName": "holiday_name",
+          "index": 3
+        },
+        {
+          "filename": "feed_info.txt",
+          "fieldName": "feed_license",
+          "index": 5
+        },
+        {
+          "filename": "feed_info.txt",
+          "fieldName": "feed_id",
+          "index": 10
+        },
+        {
+          "filename": "location_groups.txt",
+          "fieldName": "location_id",
+          "index": 2
+        },
+        {
+          "filename": "routes.txt",
+          "fieldName": "min_headway_minutes",
+          "index": 11
+        },
+        {
+          "filename": "routes.txt",
+          "fieldName": "eligibility_restricted",
+          "index": 12
+        },
+        {
+          "filename": "routes.txt",
+          "fieldName": "tts_route_short_name",
+          "index": 15
+        },
+        {
+          "filename": "routes.txt",
+          "fieldName": "tts_route_long_name",
+          "index": 16
+        },
+        {
+          "filename": "stops.txt",
+          "fieldName": "position",
+          "index": 13
+        },
+        {
+          "filename": "stops.txt",
+          "fieldName": "direction",
+          "index": 14
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "start_service_area_id",
+          "index": 11
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "end_service_area_id",
+          "index": 12
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "start_service_area_radius",
+          "index": 13
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "end_service_area_radius",
+          "index": 14
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "mean_duration_factor",
+          "index": 21
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "mean_duration_offset",
+          "index": 22
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "safe_duration_factor",
+          "index": 23
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "safe_duration_offset",
+          "index": 24
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "tts_stop_headsign",
+          "index": 25
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "min_arrival_time",
+          "index": 26
+        },
+        {
+          "filename": "stop_times.txt",
+          "fieldName": "max_departure_time",
+          "index": 27
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "trip_type",
+          "index": 11
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "drt_max_travel_time",
+          "index": 12
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "drt_avg_travel_time",
+          "index": 13
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "drt_advance_book_min",
+          "index": 14
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "drt_pickup_message",
+          "index": 15
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "drt_drop_off_message",
+          "index": 16
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "continuous_pickup_message",
+          "index": 17
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "continuous_drop_off_message",
+          "index": 18
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "tts_trip_headsign",
+          "index": 19
+        },
+        {
+          "filename": "trips.txt",
+          "fieldName": "tts_trip_short_name",
+          "index": 20
+        }
+      ]
+    },
+    {
+      "code": "unknown_file",
+      "severity": "INFO",
+      "totalNotices": 8,
+      "sampleNotices": [
+        {
+          "filename": "calendar_attributes.txt"
+        },
+        {
+          "filename": "directions.txt"
+        },
+        {
+          "filename": "farezone_attributes.txt"
+        },
+        {
+          "filename": "linked_datasets.txt"
+        },
+        {
+          "filename": "runcut.txt"
+        },
+        {
+          "filename": "stop_attributes.txt"
+        },
+        {
+          "filename": "timetables.txt"
+        },
+        {
+          "filename": "timetable_stop_order.txt"
+        }
+      ]
+    }
+  ]
+}
