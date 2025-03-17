@@ -12,7 +12,6 @@ class gtfs_validator:
 
         fare_fixer.fix_current_fares()
 
-
     def make_agency_unique(self):
         agency_fixer = agency_validator(self.unzipped_gtfs_path)
 
@@ -21,6 +20,6 @@ class gtfs_validator:
     def run_mdb_validator(self):
         mdb_fixer = mdb_validator(self.unzipped_gtfs_path)
 
-        mdb_fixer.validate_finals()
+        mdb_fixer.validate_final()
 
 

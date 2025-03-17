@@ -3,4 +3,5 @@
 transit_datasets_unzipped
 transit_datasets_zipped
 transit_datasets_final
+validation
 __pycache__

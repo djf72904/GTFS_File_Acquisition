@@ -59,15 +59,17 @@ def main():
     print("Zip final files back up for validation")
     print("------------------------------------------------------------")
     downloader.zip_data()
+    shutil.rmtree(f"./transit_datasets_unzipped")
 
     print("------------------------------------------------------------")
     print("Validate final zip files with command line validator")
     print("------------------------------------------------------------")
-
     for validator in validators:
         validator.run_mdb_validator()
 
+    print("-----------------------------------------------------------------------------------")
     print("GTFS File Acquisition Complete. Check transit_datasets_final for complete zip files")
+    print("-----------------------------------------------------------------------------------")
 
 if __name__ == "__main__":
     main()
