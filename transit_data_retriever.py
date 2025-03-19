@@ -35,7 +35,7 @@ class transit_data_retriever:
         for name, url in self.datasets.items():
             print(f"Zipping final for {name}")
             files = os.listdir(f"./transit_datasets_unzipped/{name}")
-            with zipfile.ZipFile(f"./transit_datasets_final/{name}.zip", "w") as zip_me:
+            with zipfile.ZipFile(f"./transit_datasets_final/{name}.gtfs.zip", "w") as zip_me:
                 for f in files:
                     os.rename(f"./transit_datasets_unzipped/{name}/{f}", f)
                     zip_me.write(f)

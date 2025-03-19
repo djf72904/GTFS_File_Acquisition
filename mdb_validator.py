@@ -8,7 +8,7 @@ class mdb_validator:
     def validate_final(self):
         print(f"Validating final zip for {self.unzipped_gtfs_path}")
 
-        os.system(f"java -jar gtfs-validator-6.0.0-cli.jar -i ./transit_datasets_final/{self.unzipped_gtfs_path}.zip -o ./validation/{self.unzipped_gtfs_path} -p")
+        os.system(f"java -jar gtfs-validator-6.0.0-cli.jar -i ./transit_datasets_final/{self.unzipped_gtfs_path}.gtfs.zip -o ./validation/{self.unzipped_gtfs_path} -p")
         self.check_report()
 
     def check_report(self):
@@ -23,7 +23,7 @@ class mdb_validator:
                 errorAmt += 1
 
         if errorAmt > 0:
-            os.remove(f"transit_datasets_final/{self.unzipped_gtfs_path}.zip")
+            os.remove(f"transit_datasets_final/{self.unzipped_gtfs_path}.gtfs.zip")
             print(f"{self.unzipped_gtfs_path}.zip removed from transit_datasets_final due to error")
         else:
             print(f"{self.unzipped_gtfs_path}.zip validated")
