@@ -11,8 +11,9 @@ class transit_data_retriever:
         os.makedirs(self.unzipped_dir, exist_ok=True)
 
     def download_data(self):
-        for name, url in self.datasets.items():
+        for name, id in self.datasets.items():
             print(f"Downloading {name}...")
+            url = f"https://transit.land/api/v2/rest/feeds/{id}/download_latest_feed_version?apikey=T9DmZTHOn9ZGVvYWN9Szb1sfRwGoRQUm"
             response = requests.get(url, stream=True)
             if response.status_code == 200:
                 file_path = os.path.join(self.zipped_dir, f"{name}.zip")

@@ -8,7 +8,7 @@ class mdb_validator:
     def validate_final(self):
         print(f"Validating final zip for {self.unzipped_gtfs_path}")
 
-        os.system(f"java -jar GTFS_File_Acquisition/gtfs-validator-6.0.0-cli.jar -i ./transit_datasets_final/{self.unzipped_gtfs_path}.gtfs.zip -o ./validation/{self.unzipped_gtfs_path} -p")
+        os.system(f"java -jar gtfs-validator-6.0.0-cli.jar -i ./transit_datasets_final/{self.unzipped_gtfs_path}.gtfs.zip -o ./validation/{self.unzipped_gtfs_path} -p")
         self.check_report()
 
     def check_report(self):
