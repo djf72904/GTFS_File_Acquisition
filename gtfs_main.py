@@ -39,9 +39,9 @@ def main():
     if os.path.exists("./transit_datasets_unzipped"):
         shutil.rmtree("./transit_datasets_unzipped")
         print("removed transit_datasets_unzipped")
-    # if os.path.exists("./transit_datasets_zipped"):
-    #     shutil.rmtree("./transit_datasets_zipped")
-    #     print("removed transit_datasets_zipped")
+    if os.path.exists("./transit_datasets_zipped"):
+        shutil.rmtree("./transit_datasets_zipped")
+        print("removed transit_datasets_zipped")
     if os.path.exists("./transit_datasets_final"):
         shutil.rmtree("./transit_datasets_final")
         print("removed transit_datasets_final")
@@ -51,10 +51,10 @@ def main():
         print("removed validation")
 
     downloader = transit_data_retriever(datasets)
-    # print("------------------------------------------------------------")
-    # print("Downloading and unzipping transit data from MobilityDatabase")
-    # print("------------------------------------------------------------")
-    # downloader.download_data()
+    print("------------------------------------------------------------")
+    print("Downloading and unzipping transit data from MobilityDatabase")
+    print("------------------------------------------------------------")
+    downloader.download_data()
     downloader.unzip_data()
 
     validators = []
@@ -68,21 +68,21 @@ def main():
         validator.fix_fares()
         validator.make_agency_unique()
 
-    # print("------------------------------------------------------------")
-    # print("Zip final files back up for validation")
-    # print("------------------------------------------------------------")
-    # downloader.zip_data()
-    # shutil.rmtree(f"./transit_datasets_unzipped")
-    #
-    # print("------------------------------------------------------------")
-    # print("Validate final zip files with command line validator")
-    # print("------------------------------------------------------------")
-    # for validator in validators:
-    #     validator.run_mdb_validator()
-    #
-    # print("-----------------------------------------------------------------------------------")
-    # print("GTFS File Acquisition Complete. Check transit_datasets_final for complete zip files")
-    # print("-----------------------------------------------------------------------------------")
+    print("------------------------------------------------------------")
+    print("Zip final files back up for validation")
+    print("------------------------------------------------------------")
+    downloader.zip_data()
+    shutil.rmtree(f"./transit_datasets_unzipped")
+
+    print("------------------------------------------------------------")
+    print("Validate final zip files with command line validator")
+    print("------------------------------------------------------------")
+    for validator in validators:
+        validator.run_mdb_validator()
+
+    print("-----------------------------------------------------------------------------------")
+    print("GTFS File Acquisition Complete. Check transit_datasets_final for complete zip files")
+    print("-----------------------------------------------------------------------------------")
 
 if __name__ == "__main__":
     main()
