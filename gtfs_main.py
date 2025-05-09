@@ -67,6 +67,7 @@ def main():
         print("---------------------------------------------------------")
         validator.fix_fares()
         validator.make_agency_unique()
+        validator.fix_misc_issues()
 
     print("------------------------------------------------------------")
     print("Zip final files back up for validation")
